@@ -25,7 +25,7 @@ const allowedOrigins = [
 // dynamic origin check: allow listed origins OR any vercel preview domain (*.vercel.app)
 const corsOptions = {
   origin: function (origin, callback) {
-    // allow requests with no origin (mobile apps, curl, Postman, server-to-server)
+    // allow requests with no origin (mobile apps, curl, Postman, server-to-server, uptime pingers)
     if (!origin) return callback(null, true);
 
     const isAllowed = allowedOrigins.includes(origin) || /\.vercel\.app$/.test(origin);
@@ -45,7 +45,21 @@ app.use(cors(corsOptions));
 // Ensure preflight requests are handled
 app.options('*', cors(corsOptions));
 
-// Health route (useful for probes)
+// Lightweight health check for uptime pingers (DO NOT put DB queries here)
+app.get('/healthz', (req, res) => {
+  // small log to make pings visible in Render logs (optional)
+  console.log(`[HEALTHZ] ${new Date().toISOString()} - ping from ${req.get('x-forwarded-for') || req.ip}`);
+  res.status(200).json({
+    status: 'ok',
+    uptime: process.uptime(), // seconds the process has been running
+    timestamp: new Date().toISOString()
+  });
+});
+
+// respond to HEAD requests too (some pingers use HEAD)
+app.head('/healthz', (req, res) => res.status(200).end());
+
+// Health route (useful for quick browser checks)
 app.get('/', (req, res) => res.send('Backend is live!'));
 
 // API routes
