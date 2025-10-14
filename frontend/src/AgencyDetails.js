@@ -11,7 +11,7 @@ const AgencyDetails = ({ agencyName, onBackClick }) => {
         const fetchPackages = async () => {
             if (!agencyName) return;
             try {
-                const response = await axios.get(`${API_BASE}/api/agencies/packages/${agencyName}`);
+                const response = await axios.get('https://travel-agencies-app.onrender.com/api/agencies/packages/${agencyName}');
                 setPackages(response.data);
             } catch (error) {
                 console.error('Error fetching packages:', error);
@@ -27,7 +27,7 @@ const AgencyDetails = ({ agencyName, onBackClick }) => {
             return;
         }
         try {
-            await axios.post(`${API_BASE}/api/bookings/new`, packageData, {
+            await axios.post('https://travel-agencies-app.onrender.com/api/bookings/new', packageData, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setOrderMessage('Package booked successfully!');

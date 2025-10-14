@@ -17,7 +17,7 @@ function Login() {
 
     try {
       // Updated API endpoint
-      const response = await axios.post(`${API_BASE}/api/users/login`, { email, password });
+      const response = await axios.post('https://travel-agencies-app.onrender.com/api/users/login', { email, password });
       const { token, email: userEmail } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem("email", userEmail);

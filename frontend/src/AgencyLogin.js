@@ -14,7 +14,7 @@ function AgencyLogin() {
     e.preventDefault();
     try {
       // Updated API endpoint
-      const response = await axios.post(`${API_BASE}/api/agencies/login`, {
+      const response = await axios.post('https://travel-agencies-app.onrender.com/api/agencies/login', {
         email,
         password,
       });

@@ -22,7 +22,7 @@ function Signup() {
 
     try {
       // Updated API endpoint
-      await axios.post(`${API_BASE}/api/users/signup`, { email, password });
+      await axios.post('https://travel-agencies-app.onrender.com/api/users/signup', { email, password });
       setMessage("Signup successful! Redirecting to login...");
       setTimeout(() => navigate("/login"), 1500);
     } catch (error) {

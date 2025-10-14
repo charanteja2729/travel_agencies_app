@@ -12,7 +12,7 @@ function MyBookings() {
       try {
         const token = localStorage.getItem('token');
         // Updated API endpoint
-        const response = await axios.get(`${API_BASE}/api/bookings/my-bookings`, {
+        const response = await axios.get('https://travel-agencies-app.onrender.com/api/bookings/my-bookings', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setBookings(response.data || []);

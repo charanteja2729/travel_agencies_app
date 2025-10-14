@@ -11,7 +11,7 @@ const Agencies = () => {
   useEffect(() => {
     const fetchAgencies = async () => {
       try {
-        const response = await axios.get(`${API_BASE}/api/agencies`);
+        const response = await axios.get('https://travel-agencies-app.onrender.com/api/agencies');
         setAgencies(response.data);
       } catch (error) {
         console.error('Error fetching agencies:', error);

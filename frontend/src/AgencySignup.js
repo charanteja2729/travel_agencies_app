@@ -19,7 +19,7 @@ function AgencySignup() {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${API_BASE}/api/agencies/signup`, {
+      const response = await axios.post('https://travel-agencies-app.onrender.com/api/agencies/signup', {
         email,
         password,
         agencyName,

@@ -40,10 +40,10 @@ function AgencyDashboard() {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const packagesResponse = await axios.get(`${API_BASE}/api/agencies/packages/${agencyName}`);
+        const packagesResponse = await axios.get('https://travel-agencies-app.onrender.com/api/agencies/packages/${agencyName}');
         setPackages(packagesResponse.data);
 
-        const bookingsResponse = await axios.get(`${API_BASE}/api/agencies/bookings`, {
+        const bookingsResponse = await axios.get('https://travel-agencies-app.onrender.com/api/agencies/bookings', {
             headers: { Authorization: `Bearer ${token}` }
         });
         setBookings(bookingsResponse.data || []);
@@ -62,7 +62,7 @@ function AgencyDashboard() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${API_BASE}/api/agencies/add-package`,
+        'https://travel-agencies-app.onrender.com/api/agencies/add-package',
         { ...newItem },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );
@@ -76,7 +76,7 @@ function AgencyDashboard() {
 
   const handleDeletePackage = async (packageId) => {
     try {
-      await axios.delete(`${API_BASE}/api/agencies/package/${packageId}`, {
+      await axios.delete('https://travel-agencies-app.onrender.com/api/agencies/package/${packageId}', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setPackages(packages.filter(pkg => pkg._id !== packageId));
@@ -88,7 +88,7 @@ function AgencyDashboard() {
 
   const handleUpdateBooking = async (bookingId) => {
     try {
-      const response = await axios.put(`${API_BASE}/api/agencies/booking/${bookingId}`, 
+      const response = await axios.put('https://travel-agencies-app.onrender.com/api/agencies/booking/${bookingId}', 
         { status: 'completed' },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );
@@ -128,7 +128,7 @@ function AgencyDashboard() {
   const handleUpdatePackage = async (packageId) => {
     try {
       const response = await axios.put(
-        `${API_BASE}/api/agencies/package/${packageId}`,
+        'https://travel-agencies-app.onrender.com/api/agencies/package/${packageId}',
         editFormData,
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );
