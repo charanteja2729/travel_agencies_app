@@ -9,7 +9,7 @@ const agencyRoutes = require('./api/routes/agencies');
 const bookingRoutes = require('./api/routes/bookings'); // Add this line
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 1000;
 
 // Middleware
 app.use(express.json());
