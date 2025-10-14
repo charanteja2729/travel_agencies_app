@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import gifIcon from "./Deepam.gif";
 
+const API_BASE = process.env.REACT_APP_API_URL;
 function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,7 +22,7 @@ function Signup() {
 
     try {
       // Updated API endpoint
-      await axios.post('http://localhost:5000/api/users/signup', { email, password });
+      await axios.post(`${API_BASE}/api/users/signup`, { email, password });
       setMessage("Signup successful! Redirecting to login...");
       setTimeout(() => navigate("/login"), 1500);
     } catch (error) {

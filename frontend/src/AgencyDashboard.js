@@ -3,6 +3,7 @@ import axios from 'axios';
 import './AgencyDashboard.css';
 import { useNavigate } from 'react-router-dom';
 
+const API_BASE = process.env.REACT_APP_API_URL;
 function AgencyDashboard() {
   const [agencyName, setAgencyName] = useState('');
   const [packages, setPackages] = useState([]);
@@ -39,10 +40,10 @@ function AgencyDashboard() {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const packagesResponse = await axios.get(`http://localhost:5000/api/agencies/packages/${agencyName}`);
+        const packagesResponse = await axios.get(`${API_BASE}/api/agencies/packages/${agencyName}`);
         setPackages(packagesResponse.data);
 
-        const bookingsResponse = await axios.get(`http://localhost:5000/api/agencies/bookings`, {
+        const bookingsResponse = await axios.get(`${API_BASE}/api/agencies/bookings`, {
             headers: { Authorization: `Bearer ${token}` }
         });
         setBookings(bookingsResponse.data || []);
@@ -61,7 +62,7 @@ function AgencyDashboard() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/agencies/add-package',
+        `${API_BASE}/api/agencies/add-package`,
         { ...newItem },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );
@@ -75,7 +76,7 @@ function AgencyDashboard() {
 
   const handleDeletePackage = async (packageId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/agencies/package/${packageId}`, {
+      await axios.delete(`${API_BASE}/api/agencies/package/${packageId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       setPackages(packages.filter(pkg => pkg._id !== packageId));
@@ -87,7 +88,7 @@ function AgencyDashboard() {
 
   const handleUpdateBooking = async (bookingId) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/agencies/booking/${bookingId}`, 
+      const response = await axios.put(`${API_BASE}/api/agencies/booking/${bookingId}`, 
         { status: 'completed' },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );
@@ -127,7 +128,7 @@ function AgencyDashboard() {
   const handleUpdatePackage = async (packageId) => {
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/agencies/package/${packageId}`,
+        `${API_BASE}/api/agencies/package/${packageId}`,
         editFormData,
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );

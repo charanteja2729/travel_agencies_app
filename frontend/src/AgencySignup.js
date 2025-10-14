@@ -15,10 +15,11 @@ function AgencySignup() {
   const [agencyImage, setAgencyImage] = useState('');
   const [message, setMessage] = useState('');
 
+  const API_BASE = process.env.REACT_APP_API_URL;
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/agencies/signup', {
+      const response = await axios.post(`${API_BASE}/api/agencies/signup`, {
         email,
         password,
         agencyName,

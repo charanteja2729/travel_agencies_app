@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+
+const API_BASE = process.env.REACT_APP_API_URL;
 function MyBookings() {
   const [bookings, setBookings] = useState([]);
   const [error, setError] = useState(null);
@@ -10,7 +12,7 @@ function MyBookings() {
       try {
         const token = localStorage.getItem('token');
         // Updated API endpoint
-        const response = await axios.get('http://localhost:5000/api/bookings/my-bookings', {
+        const response = await axios.get(`${API_BASE}/api/bookings/my-bookings`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setBookings(response.data || []);

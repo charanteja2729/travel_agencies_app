@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import tickGif from "./Tick.gif";
 
+const API_BASE = process.env.REACT_APP_API_URL;
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,7 +17,7 @@ function Login() {
 
     try {
       // Updated API endpoint
-      const response = await axios.post('http://localhost:5000/api/users/login', { email, password });
+      const response = await axios.post(`${API_BASE}/api/users/login`, { email, password });
       const { token, email: userEmail } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem("email", userEmail);

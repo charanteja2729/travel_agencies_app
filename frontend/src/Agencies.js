@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AgencyDetails from './AgencyDetails';
 
+const API_BASE = process.env.REACT_APP_API_URL;
 const Agencies = () => {
   const [agencies, setAgencies] = useState([]);
   const [selectedAgency, setSelectedAgency] = useState(null);
@@ -10,7 +11,7 @@ const Agencies = () => {
   useEffect(() => {
     const fetchAgencies = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/agencies');
+        const response = await axios.get(`${API_BASE}/api/agencies`);
         setAgencies(response.data);
       } catch (error) {
         console.error('Error fetching agencies:', error);

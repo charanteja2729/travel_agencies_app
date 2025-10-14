@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './AgencyDetails.css';
 
+const API_BASE = process.env.REACT_APP_API_URL;
 const AgencyDetails = ({ agencyName, onBackClick }) => {
     const [packages, setPackages] = useState([]);
     const [orderMessage, setOrderMessage] = useState(null);
@@ -10,7 +11,7 @@ const AgencyDetails = ({ agencyName, onBackClick }) => {
         const fetchPackages = async () => {
             if (!agencyName) return;
             try {
-                const response = await axios.get(`http://localhost:5000/api/agencies/packages/${agencyName}`);
+                const response = await axios.get(`${API_BASE}/api/agencies/packages/${agencyName}`);
                 setPackages(response.data);
             } catch (error) {
                 console.error('Error fetching packages:', error);
@@ -26,7 +27,7 @@ const AgencyDetails = ({ agencyName, onBackClick }) => {
             return;
         }
         try {
-            await axios.post('http://localhost:5000/api/bookings/new', packageData, {
+            await axios.post(`${API_BASE}/api/bookings/new`, packageData, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setOrderMessage('Package booked successfully!');

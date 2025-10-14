@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import './AgencyLogin.css';
 
+const API_BASE = process.env.REACT_APP_API_URL;
 function AgencyLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,7 +14,7 @@ function AgencyLogin() {
     e.preventDefault();
     try {
       // Updated API endpoint
-      const response = await axios.post('http://localhost:5000/api/agencies/login', {
+      const response = await axios.post(`${API_BASE}/api/agencies/login`, {
         email,
         password,
       });
