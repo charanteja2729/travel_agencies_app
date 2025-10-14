@@ -1,9 +1,9 @@
+// server.js
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-// Import routes
 const userRoutes = require('./api/routes/users');
 const agencyRoutes = require('./api/routes/agencies');
 const bookingRoutes = require('./api/routes/bookings');
@@ -11,27 +11,72 @@ const bookingRoutes = require('./api/routes/bookings');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+// Basic middleware
 app.use(express.json());
 
-// Allow only your frontend domain
-app.use(cors({
-  origin: 'https://travel-agencies-bfafn993p-charan-tejas-projects-28ab2eb6.vercel.app',
-  credentials: true
-}));
+// CORS: allow specific origins and Vercel preview domains.
+// Add or remove allowedOrigins entries as needed.
+const allowedOrigins = [
+  'https://travel-agencies-bfafn993p-charan-tejas-projects-28ab2eb6.vercel.app',
+  'https://travel-agencies-1jm6gopla-charan-tejas-projects-28ab2eb6.vercel.app',
+  'https://travel-agencies-app.onrender.com' // if your frontend ever calls from this origin
+];
 
+// dynamic origin check: allow listed origins OR any vercel preview domain (*.vercel.app)
+const corsOptions = {
+  origin: function (origin, callback) {
+    // allow requests with no origin (mobile apps, curl, Postman, server-to-server)
+    if (!origin) return callback(null, true);
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/tourismAppDB')
-    .then(() => console.log('Successfully connected to MongoDB.'))
-    .catch((error) => console.error('MongoDB connection error:', error));
+    const isAllowed = allowedOrigins.includes(origin) || /\.vercel\.app$/.test(origin);
+    if (isAllowed) {
+      return callback(null, true);
+    } else {
+      // for browser requests, return an error so the preflight fails clearly
+      return callback(new Error('CORS_NOT_ALLOWED_BY_SERVER'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
 
-// API Routes
+app.use(cors(corsOptions));
+// Ensure preflight requests are handled
+app.options('*', cors(corsOptions));
+
+// Health route (useful for probes)
+app.get('/', (req, res) => res.send('Backend is live!'));
+
+// API routes
 app.use('/api/users', userRoutes);
 app.use('/api/agencies', agencyRoutes);
-app.use('/api/bookings', bookingRoutes); // Add this line
+app.use('/api/bookings', bookingRoutes);
 
-// Server Initialization
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+// MongoDB connection (support either MONGO_URI or MONGODB_URI env name)
+const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI || 'mongodb://localhost:27017/tourismAppDB';
+
+mongoose.connect(mongoUri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => {
+  console.log('Successfully connected to MongoDB.');
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+})
+.catch((error) => {
+  console.error('MongoDB connection error:', error);
+  process.exit(1);
+});
+
+// Basic error handler to show CORS errors in logs (optional)
+app.use((err, req, res, next) => {
+  if (err && err.message && err.message.indexOf('CORS_NOT_ALLOWED') !== -1) {
+    console.warn('CORS blocked request from origin:', req.get('origin'));
+    return res.status(403).json({ message: 'CORS blocked: this origin is not allowed.' });
+  }
+  console.error(err);
+  res.status(500).json({ message: 'Internal server error' });
 });
