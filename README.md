@@ -101,8 +101,8 @@ POST /api/bookings/create
 
 ------------------------------------------------------------
 
-👨‍💻 Contributors                                                                                                                                                                                                                                                 - JayaSankar M
-- Charan B
+👨‍💻 Contributors 
+- Charan Teja B
 - Sneha M
 - Jaya Sankar M
 ------------------------------------------------------------
